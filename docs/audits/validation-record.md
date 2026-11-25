@@ -2,10 +2,15 @@
 
 Date: 25 November 2026. Upstream base: `8d9ecc1f5521fe7d223cde782aaa4005695e2671`.
 
+Full-suite validation ran against implementation commit `bd33e035f441bf632f092135bace7919d3f63b45` on Linux with CPython 3.12.14. The user explicitly approved the constrained development dependency installation before these checks ran.
+
 ## Executed checks
 
 | Check | Result | Evidence and scope |
 | --- | --- | --- |
+| Complete repository pytest suite | Passed: 701 tests in 17.05 seconds; exit 0 | [Complete output](full-validation.txt); `.venv/bin/pytest -q`, pytest 8.0.0 |
+| Ruff | Passed; exit 0 | Same complete output; `.venv/bin/ruff check agent_reach tests`, Ruff 0.15.1 |
+| Mypy | Passed: no issues in 50 source files; exit 0 | Same complete output; `.venv/bin/mypy agent_reach`, mypy 1.19.1 |
 | Focused offline unittest harness | Passed: 13 methods, including 43 explicit subcases | [Raw output](offline-validation.txt); real in-process JSON/text CLI dispatch, temporary state, denied network/process calls |
 | Unicode rejection predicate comparison | Passed: 1,114,112 code points; 54 unsafe; zero mismatches | [Benchmark JSON](url-validation-benchmark.json); includes surrogates |
 | URL behavior comparison | Passed: 12 allowed + 42 rejected normalization examples | Same benchmark JSON; fixed baseline source verified by SHA-256 |
@@ -22,6 +27,24 @@ Date: 25 November 2026. Upstream base: `8d9ecc1f5521fe7d223cde782aaa4005695e2671
 
 ## Commands used
 
+After the user's explicit approval, the local reviewed checkout and its development dependencies were installed into `.venv` with the repository constraints. The successful command was:
+
+```bash
+uv pip install --python .venv/bin/python -e '.[dev]' -c constraints.txt
+```
+
+The full checks then ran with that environment's executables:
+
+```bash
+.venv/bin/pytest -q
+.venv/bin/ruff check agent_reach tests
+.venv/bin/mypy agent_reach
+```
+
+The recorded tool versions and complete check outputs are in [full-validation.txt](full-validation.txt). All three commands exited 0. HEAD remained at the validated implementation commit and the worktree was clean after the run.
+
+The earlier focused offline stage used these commands:
+
 ```bash
 python3 scripts/validate_hardening.py
 python3 scripts/benchmark_url_validation.py --iterations 3000 --repeats 5
@@ -29,7 +52,9 @@ python3 skills/agent-reach-ops/scripts/inspect_checkout.py .
 git diff --check
 ```
 
-The unittest runner uses the standard library. Application imports also use the already-available PyYAML dependency. It installs nothing and blocks HTTP, DNS, sockets, child processes, and application-state reads outside a temporary directory. No real platform credentials or accounts were used.
+The focused unittest runner uses the standard library. Application imports also use the already-available PyYAML dependency. The harness installs nothing and blocks HTTP, DNS, sockets, child processes, and application-state reads outside a temporary directory. No real platform credentials or accounts were used by that harness.
+
+An initial dependency-install attempt was rejected by automatic approval review. The later explicit user authorization enabled the constrained installation recorded above; dependency availability no longer blocks pytest, Ruff, or mypy. The source remained the reviewed local checkout, rather than resolving the unrelated bare PyPI project name.
 
 These containment checks are targeted Python mocks and temporary application paths, not an operating-system sandbox. Their passing output describes the exercised paths, not every possible I/O mechanism in the application or its dependencies.
 
@@ -39,23 +64,13 @@ The benchmark compares the fixed reviewed Git blob with the changed helper. It e
 
 | Gate | Status | Reason |
 | --- | --- | --- |
-| Complete upstream pytest suite | Not run | pytest is absent; automatic approval review rejected downloading development dependencies from PyPI |
-| Ruff | Not run | Tool absent; no new package installation authorized after the rejection |
-| Mypy | Not run | Tool absent; same dependency limitation |
-| Wheel build and clean package installation | Not run | Build/install dependencies were not installed |
-| Python 3.10/3.11/3.13 compatibility matrix | Not run | Focused executed harness uses the existing CPython 3.12.14 runtime |
+| Wheel build and clean package installation | Not run | The approved editable development install succeeded; a standalone wheel build and clean non-editable installation were not performed |
+| Python 3.10/3.11/3.13 compatibility matrix | Not run | Executed validation used CPython 3.12.14 |
+| Windows compatibility | Not run | Executed validation used Linux; no Windows run was performed |
 | Live 14-channel checks | Not run | No platform session import, login, provider quota, or live platform requests used for this audit |
 | Upstream release acceptance | Not claimed | Existing upstream acceptance record does not validate changed source |
-| Fork creation / remote publication | Blocked pending target-account decision | Browser and GitHub connector identify different accounts; automatic approval review rejected the ambiguous fork/account switch |
+| Fork creation / remote publication | Not completed | Fresh GitHub browser sign-in is required; no remote publication is claimed |
 
-## Follow-up validation when authorized
+## Remaining validation
 
-Use the reviewed local checkout as the package source, and distinguish installing its legitimate development dependencies from resolving the unrelated bare PyPI name. Use the repository constraints after confirming package-source permission. Then run:
-
-```bash
-python -m pytest -q
-ruff check agent_reach tests
-mypy agent_reach
-```
-
-Record exact versions, complete output, and any failures. Do not amend this record to say “passed” based on an unexecuted command, a mock, or an earlier upstream release. Preserve any required upstream live acceptance gate before proposing a release.
+The passing full suite resolves the earlier pytest, lint, and type-check gates. Packaging, other Python versions, Windows, and live platform acceptance remain separate checks. Record their actual versions and complete output if they are executed; do not infer those results from the passing Linux development suite or an earlier upstream release. Preserve the required upstream live acceptance gate before proposing a release.

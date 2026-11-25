@@ -1,0 +1,41 @@
+Full local validation: 25 November 2026
+Validated implementation commit: bd33e035f441bf632f092135bace7919d3f63b45
+Platform: Linux
+Python: 3.12.14
+pytest: 8.0.0
+Ruff: 0.15.1
+mypy: 1.19.1 (compiled: yes)
+
+Dependency setup completed after explicit user approval:
+uv pip install --python .venv/bin/python -e '.[dev]' -c constraints.txt
+
+The complete stdout/stderr captured from each validation command follows.
+All commands ran from the reviewed repository checkout.
+
+$ .venv/bin/pytest -q
+........................................................................ [ 10%]
+........................................................................ [ 20%]
+........................................................................ [ 30%]
+........................................................................ [ 41%]
+........................................................................ [ 51%]
+........................................................................ [ 61%]
+........................................................................ [ 71%]
+........................................................................ [ 82%]
+........................................................................ [ 92%]
+.....................................................                    [100%]
+701 passed in 17.05s
+Exit status: 0
+
+$ .venv/bin/ruff check agent_reach tests
+All checks passed!
+Exit status: 0
+
+$ .venv/bin/mypy agent_reach
+Success: no issues found in 50 source files
+Exit status: 0
+
+The worktree was clean and HEAD was unchanged after the run.
+Scope: repository tests, lint, and type checking on Linux/CPython 3.12.14.
+Standalone wheel/clean installation, other Python versions, Windows,
+live platform checks, and release acceptance were not executed.
+This record does not claim GitHub publication.

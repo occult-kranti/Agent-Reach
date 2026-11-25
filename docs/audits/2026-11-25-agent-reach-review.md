@@ -22,7 +22,7 @@ Agent Reach is useful as an agent-facing adapter and lifecycle manager. Its stro
 
 This review produced a small production patch addressing five connected concerns: duplicated diagnostic work, inconsistent diagnostic snapshots, malformed ledger containers, empty subprocess environments, and URL validation/routing. A separate reusable skill, `agent-reach-ops`, adds version-aware discovery, source pinning, session-consent boundaries, evidence receipts, and bounded review rounds. The upstream bundled `agent-reach` skill is retained; the new skill is an optional operating and review layer.
 
-**Delivery status:** source changes, regression cases, offline validation tools, and documentation are prepared locally. A personal skill can be installed independently of GitHub publication. No upstream push or fork publication is claimed by this document. The publishing account must be resolved before creating the fork. Full pytest, lint, type-check, packaging, and live-platform acceptance remain separate gates; see the accompanying validation record.
+**Delivery status:** source changes, regression cases, offline validation tools, and documentation are prepared locally. After the user approved constrained development dependency installation, the full repository suite passed: **701 pytest tests in 17.05 seconds**, **Ruff**, and **mypy across 50 source files**, at implementation commit `bd33e035f441bf632f092135bace7919d3f63b45`. A personal skill can be installed independently of GitHub publication. Remote publication remains pending fresh GitHub browser sign-in; no upstream push or fork publication is claimed by this document. Packaging, other Python versions, Windows, and live-platform acceptance remain separate gates; see the accompanying [validation record](validation-record.md).
 
 The review used parallel workstreams for upstream research, runtime reliability, process/URL correctness, and integration. Findings were checked against the checked-out source rather than assumed from older descriptions. This is a focused engineering review with an explicit remaining-work list, not a line-by-line security assessment of all third-party software.
 
@@ -36,7 +36,7 @@ The moving `releases/latest` and `main` URLs are convenient operational defaults
 
 The repository declares four direct runtime dependencies: `requests`, `loguru`, `pyyaml`, and `yt-dlp[default]`, with yt-dlp pinned to `2026.8.19`. Its `constraints.txt` pins a tested development set. Constraints improve reproducibility when used, but this file is not a complete hash-verified lock of every transitive dependency. Tools installed by channel management are a separate dependency surface. [S3, S10]
 
-During this session, automatic approval review rejected installing development dependencies from PyPI because of the user's installation warning. No substitute package source was used to bypass that rejection. The validation tools in this patch use the existing Python runtime; the offline harness uses the application's already-available PyYAML dependency where configuration imports require it.
+During the initial offline stage, automatic approval review rejected installing development dependencies from PyPI because of the user's installation warning. The user subsequently explicitly approved constrained development dependency installation. `uv pip install --python .venv/bin/python -e '.[dev]' -c constraints.txt` then succeeded from the reviewed local checkout. This installed the checkout and its legitimate dependencies without resolving this project by the unrelated bare PyPI name. The earlier offline harness remains useful independently: it uses the existing Python runtime and the application's already-available PyYAML dependency where configuration imports require it.
 
 ## What the current code provides
 
@@ -162,7 +162,9 @@ The patch includes normal pytest regression cases in the existing suite and a se
 
 The static skill inspector parses source with `ast` and reads Git identity. It does not import or execute the target repository, install tools, inspect personal configuration, or read cookies. It was checked against the real 14-channel registry, a synthetic source file that would raise if executed, a dynamic registry that must be rejected, an escaping symlink, and a mismatched revision.
 
-The validation record distinguishes executed offline checks from pending gates. Full `pytest`, `ruff`, `mypy`, wheel installation, and live channel checks must not be described as passed unless their actual outputs are recorded. Package installation was blocked in this session; a successful import or AST parse is not a substitute for those gates.
+The approved constrained development install enabled the complete repository checks at implementation commit `bd33e035f441bf632f092135bace7919d3f63b45`. On Linux with CPython 3.12.14, `.venv/bin/pytest -q` passed **701 tests in 17.05 seconds**, `.venv/bin/ruff check agent_reach tests` passed, and `.venv/bin/mypy agent_reach` found **no issues in 50 source files**. All three commands exited 0. The [validation record](validation-record.md) identifies the tool versions and links the [complete outputs](full-validation.txt).
+
+These results establish automated test, lint, and type-check success for that environment. A standalone wheel build, clean non-editable package installation, other Python versions, Windows, and live channel checks were not run. The focused offline harness and static inspector provide additional scoped evidence; neither is presented as a substitute for the complete checks or the remaining acceptance gates.
 
 Before proposing an upstream release, use the project's contribution/release process, including any live acceptance record required for changed channel behavior. Do not reuse the upstream release-acceptance record after code changes; its code fingerprint no longer identifies this build. This patch does not bump the upstream version, create a release tag, or claim fresh platform acceptance. [S10]
 
@@ -210,8 +212,8 @@ The coordinator owns scope and release status; the provenance reviewer owns curr
 
 | Priority | Work item | Why it matters | Required acceptance evidence |
 | --- | --- | --- | --- |
-| 0 | Resolve the fork-owning account and publish the prepared branch | The task is not complete until the correct remote contains the changes | Verified repository owner, branch SHA, file hashes/contents |
-| 0 | Run the full constrained development suite when dependency installation is authorized | Focused offline checks do not cover the complete application | Actual pytest, lint, type-check, packaging outputs |
+| 0 | Complete GitHub sign-in and publish the prepared branch | Remote publication remains pending | Verified repository owner, branch SHA, file hashes/contents |
+| 0 | Validate packaging and the remaining compatibility matrix | The full development suite passed on Linux with CPython 3.12; distribution and other-platform behavior remain unchecked | Standalone wheel and clean-install results; supported Python-version and Windows runs |
 | 1 | Reconcile session-import documentation and implementation | Different documents promise different consent behavior | Explicit site/profile scope, no silent import, migration/recovery tests |
 | 1 | Align confirmed challenge classification with terminal dispatch rules | Error classification can trigger another backend | Mocked dispatcher tests plus authorized live acceptance |
 | 1 | Add content completeness/pagination metadata | Avoid overstating bounded comments or public page content | Truncation, pagination, and partial-response fixtures |
