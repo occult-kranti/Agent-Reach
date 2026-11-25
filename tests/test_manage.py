@@ -529,6 +529,27 @@ def test_doctor_marks_regressed_only_when_the_previous_check_passed(env):
         Bili.passes = True
 
 
+@pytest.mark.parametrize("first_age", [0, manage.CHECK_FRESH_SECONDS + 1])
+def test_doctor_uses_one_evidence_snapshot_per_report_and_refreshes_next_call(env, monkeypatch, first_age):
+    manage.run_checks(["web"])
+    Web.passes = False
+    try:
+        manage.run_checks(["web"])
+    finally:
+        Web.passes = True
+    other_age = manage.CHECK_FRESH_SECONDS + 1 if first_age == 0 else 0
+    ages = iter([first_age, other_age])
+    monkeypatch.setattr(state, "age_seconds", lambda at: next(ages))
+
+    first = _doctor("web")
+    assert first["status"] == ("broken" if first_age == 0 else "unverified")
+    assert first["regressed"] is (first_age == 0)
+
+    second = _doctor("web")
+    assert second["status"] == ("broken" if other_age == 0 else "unverified")
+    assert second["regressed"] is (other_age == 0)
+
+
 def _doctor(name):
     return next(c for c in manage.doctor()["channels"] if c["channel"] == name)
 

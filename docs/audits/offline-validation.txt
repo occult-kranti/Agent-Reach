@@ -1,0 +1,20 @@
+test_read_only_registry_and_version_commands_do_not_create_state (__main__.CliChecks.test_read_only_registry_and_version_commands_do_not_create_state) ... ok
+test_real_doctor_dispatch_emits_one_structured_error (__main__.CliChecks.test_real_doctor_dispatch_emits_one_structured_error) ... ok
+test_text_doctor_preserves_successful_output (__main__.CliChecks.test_text_doctor_preserves_successful_output) ... ok
+test_text_doctor_reports_bad_ledger_without_traceback (__main__.CliChecks.test_text_doctor_reports_bad_ledger_without_traceback) ... ok
+test_each_checked_channel_computes_one_fingerprint_per_report (__main__.DoctorChecks.test_each_checked_channel_computes_one_fingerprint_per_report) ... ok
+test_expiry_and_regression_agree_and_next_report_reevaluates (__main__.DoctorChecks.test_expiry_and_regression_agree_and_next_report_reevaluates) ... ok
+test_default_environment_is_an_independent_copy (__main__.EnvironmentChecks.test_default_environment_is_an_independent_copy) ... ok
+test_explicit_empty_environment_excludes_parent (__main__.EnvironmentChecks.test_explicit_empty_environment_excludes_parent) ... ok
+test_explicit_environment_is_copied_without_parent_keys (__main__.EnvironmentChecks.test_explicit_environment_is_copied_without_parent_keys) ... ok
+test_bad_ownership_prevents_the_mutation_callback (__main__.StateChecks.test_bad_ownership_prevents_the_mutation_callback) ... ok
+test_malformed_containers_fail_closed_without_rewriting_or_leaking (__main__.StateChecks.test_malformed_containers_fail_closed_without_rewriting_or_leaking) ... ok
+test_malformed_skill_lists_preserve_preferences (__main__.StateChecks.test_malformed_skill_lists_preserve_preferences) ... ok
+test_valid_extension_data_and_missing_defaults_are_preserved (__main__.StateChecks.test_valid_extension_data_and_missing_defaults_are_preserved) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.044s
+
+OK
+Offline guards: zero network, socket, subprocess, or external state-read attempts.
+Scope: focused unittest checks only; full pytest/lint/type/live suites were not run.

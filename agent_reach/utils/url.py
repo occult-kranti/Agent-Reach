@@ -3,8 +3,12 @@
 from __future__ import annotations
 
 import ipaddress
+import re
 import socket
 from urllib.parse import urlsplit
+
+# Check before parsing: urlsplit silently strips some control characters.
+_UNSAFE_URL_CHARACTERS = re.compile(r"[\s\\\x00-\x1f\x7f]")
 
 _BLOCKED_PUBLIC_FETCH_HOSTS = {
     "home.arpa",
@@ -47,14 +51,7 @@ def _literal_ip_address(
 def normalize_public_http_url(url: str) -> str:
     """Normalize a URL or reject targets that are not clearly public HTTP(S)."""
     candidate = str(url or "").strip()
-    if (
-        not candidate
-        or "\\" in candidate
-        or any(
-            character.isspace() or ord(character) < 0x20 or ord(character) == 0x7F
-            for character in candidate
-        )
-    ):
+    if not candidate or _UNSAFE_URL_CHARACTERS.search(candidate):
         raise ValueError("only public HTTP(S) URLs are allowed")
     if "://" not in candidate:
         candidate = f"https://{candidate}"
@@ -103,6 +100,8 @@ def host_matches(url: str, *domains: str) -> bool:
     than substring matching prevents lookalikes such as ``x.com.evil.test`` and
     userinfo disguises such as ``x.com@evil.test``.
     """
+    if not isinstance(url, str) or _UNSAFE_URL_CHARACTERS.search(url):
+        return False
     try:
         parsed = urlsplit(url)
         host = (parsed.hostname or "").lower().rstrip(".")

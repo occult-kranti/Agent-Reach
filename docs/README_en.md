@@ -233,6 +233,14 @@ Agent Reach has no official token, coin, investment product, fee-claim program, 
 
 [MIT](../LICENSE)
 
+## Independent review and operations skill
+
+This branch includes a [source-pinned engineering review](audits/2026-11-25-agent-reach-review.md),
+[validation record](audits/validation-record.md), and an optional
+[Agent Reach Operations skill](../skills/agent-reach-ops/SKILL.md).
+The review covers focused runtime/input improvements and records the limits of the offline checks.
+It does not claim a new upstream release or live verification of every platform.
+
 ## Friends
 
 [Agent Skills Hub](https://agentskillshub.top/) — Find Claude skills & MCP servers without guessing what's safe. Every one of 133,000+ entries is security-graded, quality-scored, and refreshed every 8 hours.

@@ -14,7 +14,7 @@ from agent_reach.channels.xiaohongshu import XiaoHongShuChannel
 from agent_reach.channels.xiaoyuzhou import XiaoyuzhouChannel
 from agent_reach.channels.xueqiu import XueqiuChannel
 from agent_reach.channels.youtube import YouTubeChannel
-from agent_reach.utils.url import host_matches
+from agent_reach.utils.url import host_matches, normalize_public_http_url
 
 
 @pytest.mark.parametrize(
@@ -137,3 +137,34 @@ def test_fixed_domain_channels_reject_suffix_lookalikes_and_userinfo(
 )
 def test_host_matches_rejects_invalid_ports(malicious_url):
     assert not host_matches(malicious_url, "x.com")
+
+
+@pytest.mark.parametrize("character", ["\t", "\n", "\r", "\x00", "\x1f", "\x7f", " ", "\u00a0", "\\"])
+@pytest.mark.parametrize("placement", ["host", "path", "query"])
+def test_raw_unsafe_characters_are_rejected_before_url_parsing(character, placement):
+    parts = {
+        "host": f"https://x{character}.com/post/1",
+        "path": f"https://x.com/post/{character}1",
+        "query": f"https://x.com/post/1?q=a{character}b",
+    }
+    url = parts[placement]
+
+    assert not host_matches(url, "x.com")
+    with pytest.raises(ValueError, match="only public HTTP"):
+        normalize_public_http_url(url)
+
+
+@pytest.mark.parametrize("url", ["\x00https://x.com/post/1", " https://x.com/post/1", "https://x.com/post/1\n"])
+def test_host_matches_does_not_silently_strip_input(url):
+    assert not host_matches(url, "x.com")
+
+
+@pytest.mark.parametrize("url", [None, b"https://x.com/post/1", 123, {"url": "https://x.com"}])
+def test_host_matches_rejects_non_text_input(url):
+    assert not host_matches(url, "x.com")
+
+
+@pytest.mark.parametrize("url", ["https://x.com/search?q=hello%20world", "https://x.com/post/a%0Ab", "https://x.com/%E4%B8%AD%E6%96%87"])
+def test_percent_encoded_path_and_query_remain_usable(url):
+    assert host_matches(url, "x.com")
+    assert normalize_public_http_url(url) == url

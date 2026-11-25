@@ -16,7 +16,7 @@ UTF8_ENV = {
 
 def utf8_subprocess_env(base: Mapping[str, str] | None = None) -> dict[str, str]:
     """Return an environment that forces Python child processes into UTF-8 mode."""
-    env = dict(base or os.environ)
+    env = dict(os.environ if base is None else base)
     env.update(UTF8_ENV)
     return env
 

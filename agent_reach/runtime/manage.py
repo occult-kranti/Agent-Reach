@@ -216,7 +216,8 @@ def regressed(check: Optional[dict]) -> bool:
     return any(previous.get(a) and not ok for a, ok in check.get("actions", {}).items())
 
 
-def channel_status(ch, data: dict) -> dict:
+def channel_status(ch, data: dict, *, current_actions: Optional[dict[str, bool]] = None) -> dict:
+    """Describe one channel, optionally reusing evidence from this same report."""
     if not is_added(ch, data):
         return {"status": "not_added", "problems": [], "hint": f"agent-reach add {ch.name}"}
     problems = [f"{t} not installed: run `agent-reach add {ch.name}`" for t in channel_tools(ch) if not tools.present(t)]
@@ -224,7 +225,7 @@ def channel_status(ch, data: dict) -> dict:
     if problems:
         return {"status": "needs_setup", "problems": problems}
     check = data["checks"].get(ch.name)
-    actions = fresh_actions(ch.name, check)
+    actions = fresh_actions(ch.name, check) if current_actions is None else current_actions
     query = next((a.name for a in ch.actions if a.name in ("search", "jobs")), None)
     if actions and (check.get("scope") != "search" or query in actions):
         failed = [a for a, ok in actions.items() if not ok]
@@ -253,7 +254,8 @@ def doctor() -> dict:
     for ch in registered:
         check = data["checks"].get(ch.name)
         current = fresh_actions(ch.name, check)
-        channels.append({"channel": ch.name, "level": ch.level, **channel_status(ch, data),
+        channels.append({"channel": ch.name, "level": ch.level,
+                         **channel_status(ch, data, current_actions=current),
                          "regressed": regressed({**check, "actions": current}) if check and current else False})
     from .onboarding import capability_summary
 

@@ -272,7 +272,14 @@ def _cmd_doctor(args: Sequence[str]) -> int:
         return _bad_input(None, "doctor", str(exc))
     if not ns.text:
         return _mgmt("doctor", manage.doctor)
-    result = manage.doctor()
+    try:
+        result = manage.doctor()
+    except ReachError as err:
+        sys.stderr.write(f"{err.code}: {err.message}\n")
+        hint = err.hint or DEFAULT_HINTS.get(err.code, "")
+        if hint:
+            sys.stderr.write(hint + "\n")
+        return 1
     sys.stdout.write(f"Agent Reach {result['version']}\n\n")
     for c in result["channels"]:
         extra = "; ".join(c["problems"]) or c.get("hint", "")

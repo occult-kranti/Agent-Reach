@@ -1,0 +1,121 @@
+{
+  "ok": true,
+  "scope": "URL-normalization helper only; no network, DNS, CLI, or platform benchmark",
+  "baseline_commit": "8d9ecc1f5521fe7d223cde782aaa4005695e2671",
+  "baseline_source_sha256": "a5ad76ecc4ca641d497b01cc7e90f573c137d2e7acac4c45ade519b6a461e0e8",
+  "machine": {
+    "python": "3.12.14",
+    "implementation": "CPython",
+    "operating_system": "Linux",
+    "architecture": "x86_64",
+    "logical_cpus": 9,
+    "timer_resolution_seconds": 1e-09
+  },
+  "method": {
+    "iterations_per_repeat": 3000,
+    "repeats": 5,
+    "warmup_calls_per_function_per_sample": 250,
+    "statistic": "median",
+    "garbage_collection": "disabled during timeit measurements",
+    "limitations": "Process-local timing; scheduler and interpreter noise affect results"
+  },
+  "unicode_scanner_equivalence": {
+    "code_points_checked": 1114112,
+    "rejected_code_points": 54,
+    "mismatches": 0,
+    "includes_surrogates": true
+  },
+  "behavior_checks": {
+    "allowed_cases": 12,
+    "rejected_cases": 42,
+    "normalization_matches_baseline": true,
+    "routing_rejections": 8,
+    "routing_encoded_or_unicode_acceptances": 4
+  },
+  "measurements": [
+    {
+      "sample": "short_article",
+      "url_characters": 27,
+      "baseline_median_ns_per_call": 6335.9,
+      "current_median_ns_per_call": 4415.7,
+      "speedup_ratio": 1.435,
+      "baseline_samples_seconds": [
+        0.019007662,
+        0.019206811,
+        0.019427665,
+        0.018581068,
+        0.018943214
+      ],
+      "current_samples_seconds": [
+        0.01324558,
+        0.013231859,
+        0.01335824,
+        0.013246992,
+        0.01329192
+      ]
+    },
+    {
+      "sample": "repository_issue",
+      "url_characters": 77,
+      "baseline_median_ns_per_call": 9663.6,
+      "current_median_ns_per_call": 4891.6,
+      "speedup_ratio": 1.976,
+      "baseline_samples_seconds": [
+        0.02899067,
+        0.029710646,
+        0.028836177,
+        0.028882256,
+        0.029452326
+      ],
+      "current_samples_seconds": [
+        0.014674836,
+        0.014701546,
+        0.015489454,
+        0.014483587,
+        0.014221942
+      ]
+    },
+    {
+      "sample": "video_query",
+      "url_characters": 59,
+      "baseline_median_ns_per_call": 8549.3,
+      "current_median_ns_per_call": 4748.6,
+      "speedup_ratio": 1.8,
+      "baseline_samples_seconds": [
+        0.025646615,
+        0.025647758,
+        0.025746655,
+        0.025870904,
+        0.02561699
+      ],
+      "current_samples_seconds": [
+        0.014242454,
+        0.014245949,
+        0.014583137,
+        0.014175913,
+        0.014650819
+      ]
+    },
+    {
+      "sample": "long_encoded_query",
+      "url_characters": 1527,
+      "baseline_median_ns_per_call": 106740.9,
+      "current_median_ns_per_call": 12839.9,
+      "speedup_ratio": 8.313,
+      "baseline_samples_seconds": [
+        0.317046881,
+        0.315054891,
+        0.320222836,
+        0.326891509,
+        0.352551366
+      ],
+      "current_samples_seconds": [
+        0.036292576,
+        0.036564347,
+        0.053393534,
+        0.038901622,
+        0.038519797
+      ]
+    }
+  ]
+}

@@ -233,6 +233,14 @@ Agent Reach 没有官方代币、币、投资产品、领取手续费活动、�
 
 [MIT](LICENSE)
 
+## Independent review and operations skill
+
+This branch includes a [source-pinned engineering review](docs/audits/2026-11-25-agent-reach-review.md),
+[validation record](docs/audits/validation-record.md), and an optional
+[Agent Reach Operations skill](skills/agent-reach-ops/SKILL.md).
+The review covers focused runtime/input improvements and records the limits of the offline checks.
+It does not claim a new upstream release or live verification of every platform.
+
 ## 友情链接
 
 [Agent Skills Hub](https://agentskillshub.top/) — 找 Claude 技能和 MCP 服务器，不用猜哪个安全：133,000+ 个条目全部安全分级、质量评分，每 8 小时刷新。

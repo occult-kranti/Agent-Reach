@@ -1,0 +1,439 @@
+{
+  "schema_version": 1,
+  "ok": true,
+  "inspection": "static; target code not executed",
+  "commit": "8d9ecc1f5521fe7d223cde782aaa4005695e2671",
+  "package": {
+    "name": "agent-reach",
+    "version": "1.6.1",
+    "requires-python": ">=3.10"
+  },
+  "channel_count": 14,
+  "levels": {
+    "default": 5,
+    "experimental": 3,
+    "optional": 6
+  },
+  "channels": [
+    {
+      "name": "github",
+      "level": "default",
+      "actions": [
+        {
+          "name": "search",
+          "backends": [
+            "gh",
+            "github-api"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "read",
+          "backends": [
+            "gh",
+            "github-api"
+          ],
+          "public_web": []
+        }
+      ],
+      "source": "agent_reach/channels/github.py"
+    },
+    {
+      "name": "twitter",
+      "level": "experimental",
+      "actions": [
+        {
+          "name": "search",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": [
+            "x.com/",
+            "twitter.com/"
+          ]
+        },
+        {
+          "name": "profile",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "tweets",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "thread",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": []
+        }
+      ],
+      "source": "agent_reach/channels/twitter.py"
+    },
+    {
+      "name": "youtube",
+      "level": "default",
+      "actions": [
+        {
+          "name": "read",
+          "backends": [
+            "yt-dlp"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "search",
+          "backends": [
+            "yt-dlp"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "subtitle",
+          "backends": [
+            "yt-dlp"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "transcribe",
+          "backends": [
+            "whisper"
+          ],
+          "public_web": []
+        }
+      ],
+      "source": "agent_reach/channels/youtube.py"
+    },
+    {
+      "name": "reddit",
+      "level": "optional",
+      "actions": [
+        {
+          "name": "search",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": [
+            "reddit.com/r/"
+          ]
+        },
+        {
+          "name": "read",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": [
+            "reddit.com/r/",
+            "redd.it/"
+          ]
+        },
+        {
+          "name": "subreddit",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": []
+        }
+      ],
+      "source": "agent_reach/channels/reddit.py"
+    },
+    {
+      "name": "facebook",
+      "level": "experimental",
+      "actions": [
+        {
+          "name": "search",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": [
+            "facebook.com/"
+          ]
+        },
+        {
+          "name": "profile",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": []
+        }
+      ],
+      "source": "agent_reach/channels/facebook.py"
+    },
+    {
+      "name": "instagram",
+      "level": "experimental",
+      "actions": [
+        {
+          "name": "search",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "profile",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "posts",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": []
+        }
+      ],
+      "source": "agent_reach/channels/instagram.py"
+    },
+    {
+      "name": "bilibili",
+      "level": "default",
+      "actions": [
+        {
+          "name": "search",
+          "backends": [
+            "bili-cli"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "read",
+          "backends": [
+            "bili-cli",
+            "bilibili-api"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "hot",
+          "backends": [
+            "bili-cli",
+            "bilibili-api"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "subtitle",
+          "backends": [
+            "bili-cli"
+          ],
+          "public_web": []
+        }
+      ],
+      "source": "agent_reach/channels/bilibili.py"
+    },
+    {
+      "name": "xiaohongshu",
+      "level": "optional",
+      "actions": [
+        {
+          "name": "search",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": [
+            "xiaohongshu.com/explore/",
+            "xiaohongshu.com/search_result/",
+            "xhslink.com/"
+          ]
+        },
+        {
+          "name": "read",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": [
+            "xiaohongshu.com/explore/",
+            "xiaohongshu.com/search_result/",
+            "xhslink.com/"
+          ]
+        },
+        {
+          "name": "comments",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": []
+        }
+      ],
+      "source": "agent_reach/channels/xiaohongshu.py"
+    },
+    {
+      "name": "linkedin",
+      "level": "optional",
+      "actions": [
+        {
+          "name": "jobs",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": [
+            "linkedin.com/jobs/view/"
+          ]
+        },
+        {
+          "name": "read",
+          "backends": [
+            "opencli"
+          ],
+          "public_web": [
+            "linkedin.com/jobs/view/"
+          ]
+        }
+      ],
+      "source": "agent_reach/channels/linkedin.py"
+    },
+    {
+      "name": "boss",
+      "level": "optional",
+      "actions": [
+        {
+          "name": "search",
+          "backends": [
+            "opencli",
+            "boss-agent-cli"
+          ],
+          "public_web": [
+            "zhipin.com/job_detail/"
+          ]
+        },
+        {
+          "name": "read",
+          "backends": [
+            "boss-agent-cli",
+            "opencli"
+          ],
+          "public_web": [
+            "zhipin.com/job_detail/"
+          ]
+        }
+      ],
+      "source": "agent_reach/channels/boss.py"
+    },
+    {
+      "name": "v2ex",
+      "level": "default",
+      "actions": [
+        {
+          "name": "hot",
+          "backends": [
+            "v2ex-api"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "node",
+          "backends": [
+            "v2ex-api"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "read",
+          "backends": [
+            "v2ex-api"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "user",
+          "backends": [
+            "v2ex-api"
+          ],
+          "public_web": []
+        }
+      ],
+      "source": "agent_reach/channels/v2ex.py"
+    },
+    {
+      "name": "xueqiu",
+      "level": "optional",
+      "actions": [
+        {
+          "name": "quote",
+          "backends": [
+            "tencent",
+            "xueqiu-api"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "search",
+          "backends": [
+            "tencent",
+            "xueqiu-api"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "hot_posts",
+          "backends": [
+            "xueqiu-api"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "hot_stocks",
+          "backends": [
+            "xueqiu-api"
+          ],
+          "public_web": []
+        }
+      ],
+      "source": "agent_reach/channels/xueqiu.py"
+    },
+    {
+      "name": "xiaoyuzhou",
+      "level": "optional",
+      "actions": [
+        {
+          "name": "transcribe",
+          "backends": [
+            "groq-whisper"
+          ],
+          "public_web": []
+        }
+      ],
+      "source": "agent_reach/channels/xiaoyuzhou.py"
+    },
+    {
+      "name": "web",
+      "level": "default",
+      "actions": [
+        {
+          "name": "search",
+          "backends": [
+            "exa"
+          ],
+          "public_web": []
+        },
+        {
+          "name": "read",
+          "backends": [
+            "jina",
+            "exa"
+          ],
+          "public_web": []
+        }
+      ],
+      "source": "agent_reach/channels/web.py"
+    }
+  ],
+  "review": {
+    "source_is_trusted": "not established by this inventory",
+    "session_reuse_review_required": true,
+    "install_from": "reviewed GitHub source; never the same-named PyPI project",
+    "live_platform_status": "not tested"
+  },
+  "revision_matches": true
+}

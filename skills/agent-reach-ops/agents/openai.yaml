@@ -1,0 +1,14 @@
+interface:
+  display_name: Agent Reach Operations
+  short_description: Audit, configure, and improve Agent Reach safely
+  default_prompt: Use $agent-reach-ops to inspect my Agent Reach setup and select
+    a verified backend for this research task.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
+  allow_implicit_invocation: true

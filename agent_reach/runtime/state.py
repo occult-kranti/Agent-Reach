@@ -49,6 +49,8 @@ def exists() -> bool:
 
 
 def load() -> dict:
+    from .result import BAD_INPUT, ReachError
+
     try:
         text = read_small_text_no_follow(state_path(), max_bytes=1024 * 1024)
         data = json.loads(text) if text else {}
@@ -59,8 +61,17 @@ def load() -> dict:
     data.setdefault("version", STATE_VERSION)
     for key in ("channels", "tools", "checks", "skill"):
         data.setdefault(key, {})
-    data["skill"].setdefault("links", [])
-    data["skill"].setdefault("unlinked", [])
+        if not isinstance(data[key], dict):
+            raise ReachError(BAD_INPUT, f"Invalid state.json: {key} must be an object", hint=(
+                "Restore the malformed state field from a backup; the existing ledger was not changed."))
+    for key in ("links", "unlinked"):
+        data["skill"].setdefault(key, [])
+        if not isinstance(data["skill"][key], list):
+            raise ReachError(BAD_INPUT, f"Invalid state.json: skill.{key} must be a list", hint=(
+                "Restore the malformed state field from a backup; the existing ledger was not changed."))
+    if "owned_paths" in data and not isinstance(data["owned_paths"], dict):
+        raise ReachError(BAD_INPUT, "Invalid state.json: owned_paths must be an object", hint=(
+            "Restore the ownership ledger from a backup; no deletion permission can be inferred."))
     if not isinstance(data.get("removed_defaults"), list):
         data["removed_defaults"] = []
     return data
