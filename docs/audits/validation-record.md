@@ -24,6 +24,7 @@ Full-suite validation ran against implementation commit `bd33e035f441bf632f09213
 | Independent patch review | No blocking issue found; text-mode diagnostic finding resolved and re-reviewed | Final CLI fix adds controlled stderr output with return code 1; successful text mode stays unchanged |
 | Syntax inventory | Passed: 92 Python files parsed | Application, tests, scripts, and repository skill code; this is not type checking |
 | Installed skill readback | Passed: six reconciled files match repository copy | SKILL.md, metadata, generated icon, two references, and static inspector |
+| Fork publication verification | Passed: remote branch head and complete Git tree match the local published snapshot | [Publication record](publication-record.md); fork owned by `occult-kranti`, snapshot `d0c87af1e0ca06c357075562fea1311d311cd65d` |
 
 ## Commands used
 
@@ -69,7 +70,6 @@ The benchmark compares the fixed reviewed Git blob with the changed helper. It e
 | Windows compatibility | Not run | Executed validation used Linux; no Windows run was performed |
 | Live 14-channel checks | Not run | No platform session import, login, provider quota, or live platform requests used for this audit |
 | Upstream release acceptance | Not claimed | Existing upstream acceptance record does not validate changed source |
-| Fork creation / remote publication | Not completed | Fresh GitHub browser sign-in is required; no remote publication is claimed |
 
 ## Remaining validation
 

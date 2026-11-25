@@ -71,7 +71,11 @@ Do not run browser/session-backed examples until their account scope is authoriz
   Transcription is a separate audio processing operation with provider requirements.
 - Bilibili `subtitle` describes the first video part; unavailable output alone does not
   establish that the source has no subtitles.
-- Reddit `read` requests a bounded post/comment result; do not label it all comments.
+- Reddit `read` makes one OpenCLI request with `--limit 20`; the upstream limit semantics
+  are not established here, so do not describe that as exactly 20 comments. This adapter
+  has no comment-pagination or reply-expansion loop; do not claim it returns all comments.
+  Reddit `subreddit` exposes no sort parameter and does not explicitly request `new`;
+  do not label its output the latest posts without independently verifying order and coverage.
 - LinkedIn declares job search and job-detail actions; do not promise full people or company scraping.
 - Xiaohongshu `read` supplies text; do not claim the images or video were understood.
   `comments` returns loaded comments/replies, not an exhaustive export.
